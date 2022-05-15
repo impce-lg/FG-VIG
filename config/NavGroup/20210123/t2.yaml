@@ -1,0 +1,168 @@
+%YAML:1.0
+#--------------------------------------------------------------------------------------------
+# ConfigName: KITTI_20110930_0028_raw.yaml
+# file parameters
+#--------------------------------------------------------------------------------------------
+## input
+NavFile: "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/t2/NavNED/NavNED.txt"
+IMUfile: "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/t2/m40/IMU_VIG.txt"
+GNSSfile: "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/t2/GNSS/RTK_NED.txt"
+ImgPath: "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/t2/images/data/"
+ImgTimeFile: "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/t2/images/Time.txt"
+## output
+NavResult: "./Results/VIG/NavGroup/20210123/t2/NavState.txt"  # navigation states
+NavError: "./Results/VIG/NavGroup/20210123/t2/FG_NavError.txt"  # navigation states
+IMUBias: "./Results/VIG/NavGroup/20210123/t2/IMUBias.txt"   # imu error terms
+KMLFile: "./Results/VIG/NavGroup/20210123/t2/pos.kml"     # kml
+MapPoints: "./Results/VIG/NavGroup/20210123/t2/MapPoints.txt" # output feature table of the tracker
+WriteVideo: 0
+Video: "./Results/VIG/NavGroup/20210123/t2/Video.avi"     # output video
+NavFrame: "NED"
+
+#--------------------------------------------------------------------------------------------
+# imu Configuration
+#--------------------------------------------------------------------------------------------
+UseIMU: 1
+IMUStartTime: 529845.996289498      # start epoch
+IMUEndTime: 530530.262098262
+# Extrinsic parameter between IMU and body.
+## Rotation(attitude, degree) from camera frame to imu frame
+i_R_c: !!opencv-matrix
+  rows: 3
+  cols: 3
+  dt: d
+  data: 
+        # [0,0,1,
+        #  1,0,0,
+        #  0,1,0]
+        [-0.0113149,-0.00886782,0.99989666,
+          0.99993363,-0.00227156,0.01129517,
+          0.00217116,0.9999581,0.00889294]
+      # [91.25182978,0.84997390,89.55229569]
+## camera origin position in imu frame
+i_t_c: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [0.64909026,0.58241509,0.01199196]
+## Initial states noise
+InitAttSigma:  0.02            # deg, std for roll and pitch, 2 times for yaw std
+InitPosSigma:  0.01            # m, std for position
+InitVelSigma:  0.05            # m/s, std std for velocity
+InitAccBiasSigma:  0.005          # 
+InitGyroBiasSigma:  0.005         # 
+InitAccBetwBiasSigma: 0.000167    # 
+InitGyroBetwBiasSigma: 2.91e-006  # 
+## IMU error model
+AccSigma:  0.02              # nominal: 0.005 m/s/sqrt(hr) = 0.000083333
+GyroSigma:  0.0015          # nominal: 0.2 °/sqrt(hr) = 0.000058178
+AccBiasRW: 2.666E-04             # nominal: 2 ug = 2*9.8*1e-6
+GyroBiasRW: 1.82E-05            # nominal: 2 deg/h = 2*PI/180/3600 = 0.000009696
+IntgSigma:  1.0e-8              # 
+BiasAccOmegaInt: 1.0e-5
+Norm_g: 9.80                 # Wuhan gravity norm
+
+#--------------------------------------------------------------------------------------------
+# GNSS Configuration
+#--------------------------------------------------------------------------------------------
+UseGNSS: 1
+t_ig:  !!opencv-matrix # GNSS antenna in IMU frame
+  rows: 3
+  cols: 1
+  dt: d
+  data: [-0.219,-0.111,-0.096]
+
+#--------------------------------------------------------------------------------------------
+# Camera Configuration
+#--------------------------------------------------------------------------------------------
+UseCam: 1
+Cam.fps: 20.0            # Camera frames per second, the window size is  fps+1
+InitWindowSize: 9       # It's useless atcually, configuration.cpp define that mWindowSize= fps+1
+Equalize: 1              # Contrast Limited AHE (CLAHE) is a variant of adaptive histogram equalization in which the contrast amplification is limited
+Mask: "./config/NavGroup/20210123/VIGMask.jpg"
+PubFrequency: 20         # image publish frequency
+## intrinsic parameters
+Cam.nCols: 1280
+Cam.nRows: 800
+Cam.fcx: 1175.21132279
+Cam.fcy: 1165.6983945
+Cam.ccx: 622.96380314
+Cam.ccy: 508.7217949
+Cam.alpha: 0.0
+## distortion parameters
+Cam.DistCoef: !!opencv-matrix
+  rows: 5
+  cols: 1
+  dt: d
+  data: [-0.17935423,0.13291216,0.00148271,0.0001981,-0.07605535] #k1,k2,p1,p2,k3
+Sigma_Pixel: 1.5           # unit pixel
+
+#--------------------------------------------------------------------------------------------
+# Feature Tracker Configuration
+#--------------------------------------------------------------------------------------------
+MaxFeatureNumPerFrame: 1500 # maximum points in the the currrent image 
+MinDist4Feature: 30   # minimum number of tracked points in the features_, i.e.,in the states,
+                            # before creating a new key frame of features by triangulation from the feature table
+FMatThreshPix: 1.0   # CV Find Fundamental Matrix Threshold
+NumUnDisIter: 8
+
+#--------------------------------------------------------------------------------------------
+# Feature Manager Configuration
+#--------------------------------------------------------------------------------------------
+FocalLength: 1175.0        # focal length, directly from VINS, VINS use the value for every camera
+                           # it may not be correct for albi
+MinKeyFrameParallax: 30.0  # keyframe selection threshold (pixel)
+                           # the actuall selection is MinKeyFrameParallax/FocalLength = 10.0/460
+MinCoFrames: 4
+MinCoFeatures: 20
+DepthThreshold: 60        # maximum depth Threshold(m)
+
+#--------------------------------------------------------------------------------------------
+# Optimization Solver Configuration
+#--------------------------------------------------------------------------------------------
+SmootherLag: 1.1           # smoother lag (in seconds)
+NumFLSmootherUpdIters: 2   # number of smoother update iterations
+
+#--------------------------------------------------------------------------------------------
+# Viewer Configuration
+#--------------------------------------------------------------------------------------------
+UseViewer: 1
+Viewer.bFollow: 1
+Viewer.bShowKeyFrames: 1
+Viewer.bShowMapPoints: 1
+Viewer.bSaveCurMap: 0
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3
+Viewer.ViewpointX: 0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500
+
+# Test SLAM
+VSlam: 0
+
+# Test VIO
+VIO: 0
+VIOLag: 1.0
+VSlamInitFrameId: 28
+TestFramesThreshold: 20
+
+## initial set
+RPYl: !!opencv-matrix
+  rows: 3
+  cols: 1
+  dt: d
+  data: # [-1.852315256,10.84379923,34.19985079] # true
+       [-1.80930393672,10.8111140395,34.1978201701] # thinkpad
+      # [-1.80769045,10.7731508,34.1994751]  # desk
+RPYr: !!opencv-matrix
+  rows: 3
+  cols: 1
+  dt: d
+  data: # [-2.892577429,9.891543375,37.79974462] # true
+       [-2.84514638608,9.87231719337,37.7995973986] # thinkpad
+      # [-2.85276203,9.81870223,37.7983846]  # desk

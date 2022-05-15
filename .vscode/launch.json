@@ -1,0 +1,41 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) 启动",
+            "type": "cppdbg",
+            "request": "launch",
+            /* VIG */
+            "program": "${workspaceFolder}/build/VIG_Syn",   // Debug
+            // "program": "${workspaceFolder}/release/VIG_Syn",   // Release
+            "args": [
+                // "${workspaceFolder}/config/NavGroup/20210123/t1.yaml"
+                "${workspaceFolder}/config/NavGroup/20210123/t1a.yaml"
+                // "${workspaceFolder}/config/NavGroup/20210123/t2.yaml"
+                // "${workspaceFolder}/config/NavGroup/20210123/t2a.yaml"
+                // "${workspaceFolder}/config/NavGroup/20210123/t3_e.yaml"
+                // "${workspaceFolder}/config/NavGroup/20210123/t3a.yaml"
+            ],
+            // /* Sim */
+            // "program": "${workspaceFolder}/build/VIG_Sim",   // Debug
+            // "args": [
+            //     "${workspaceFolder}/config/vig_sim/RtCp.yaml"
+            // ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

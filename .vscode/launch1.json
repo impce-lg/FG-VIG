@@ -1,0 +1,34 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) 启动",
+            "type": "cppdbg",
+            "request": "launch",
+
+            /* VIGTest */
+            "program": "${workspaceFolder}/build/IG",   // Debug
+            "args": [
+                "/home/huanhexiao/Dataset/VIG_FactorGraph/NavGroup/20210123/", // 不用变
+                // "/home/huanhexiao/WORK/VIO/VI_ORB_Initial/Examples/JinVIO/tmp_results/Jin/", // 不用变
+                "${workspaceFolder}/Results/IG/", // 不用变
+                "t3_e",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
