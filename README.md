@@ -2,7 +2,7 @@
 
 
 
-This repository focuses on the simulated Monocular Vision/INS/GNSS fusion based on Factor Graph optimization.
+This repository focuses on the Monocular Vision/INS/GNSS fusion based on Factor Graph optimization.
 It includes experimental and simulated versions in /Examples. 
 Now only the simulated data is available.
 The difference of the experimental and simulated data is mainly on the vision front-end, the format of INS and GNSS is same to the real tests.
