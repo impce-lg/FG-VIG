@@ -34,7 +34,7 @@ The experimental data will be available as soon as it get ready.
 
 ```shell
 
-git clone https://github.com/huanhexiao/FG-VIG
+git clone https://github.com/impce-lg/FG-VIG
 
 mkdir build && cd build 
 
